@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPA Calculator</title>
+    <style>
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #0066cc;
+            --accent-color: #ff9900;
+            --light-color: #f5f5f5;
+            --dark-color: #333333;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .campus-logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .calculator-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .instruction-panel {
+            background-color: #e9f0f7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .instruction-panel h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .instruction-panel ul {
+            padding-left: 20px;
+        }
+
+        .instruction-panel li {
+            margin-bottom: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            padding: 0 15px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .semester-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            margin: 20px 0 15px 0;
+            border-radius: 4px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: 500;
+        }
+
+        button:hover {
+            background-color: var(--primary-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 15px;
+        }
+
+        .add-btn {
+            background-color: var(--success-color);
+        }
+
+        .add-btn:hover {
+            background-color: #218838;
+        }
+
+        .remove-btn {
+            background-color: var(--danger-color);
+        }
+
+        .remove-btn:hover {
+            background-color: #c82333;
+        }
+
+        .reset-btn {
+            background-color: var(--warning-color);
+            color: var(--dark-color);
+        }
+
+        .reset-btn:hover {
+            background-color: #e0a800;
+        }
+
+        .calculate-btn {
+            background-color: var(--primary-color);
+            padding: 15px 25px;
+            font-size: 1.1rem;
+        }
+
+        .calculate-btn:hover {
+            background-color: #00264d;
+        }
+
+        .result-container {
+            background-color: #e9f0f7;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .result-container h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .gpa-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .gpa-class {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--primary-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            display: inline-block;
+            background-color: #d4e5f7;
+        }
+
+        .subject-rows {
+            margin: 0 15px;
+        }
+
+        .subject-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .field {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f5f5f5;
+        }
+
+        .grade-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .grade-card {
+            flex: 1;
+            min-width: 250px;
+            max-width: 450px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .grade-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .summary-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .summary-item {
+            flex: 1;
+            min-width: 200px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .summary-item h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .subject-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .field {
+                width: 100%;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="src/image/naveen_logo.png" alt="Naveen's logo" class="campus-logo">
+            <h1>GPA Calculator</h1>
+            <p>Accurately calculate your Grade Point Average according to Sri Lankan standards</p>
+        </header>
+
+        <div class="instruction-panel">
+            <h3>How to use this calculator:</h3>
+            <ul>
+                <li>Enter your course details and academic year</li>
+                <li>Add all your subjects with their respective credit values</li>
+                <li>Select the grade you received for each subject</li>
+                <li>Click "Calculate GPA" to see your results</li>
+                <li>You can add multiple semesters to calculate cumulative GPA</li>
+            </ul>
+        </div>
+
+        <div class="calculator-container">
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="field">
+                        <label for="student-name">Student Name</label>
+                        <input type="text" id="student-name" placeholder="Enter your name">
+                    </div>
+                    <div class="field">
+                        <label for="student-id">Student ID</label>
+                        <input type="text" id="student-id" placeholder="Enter your ID">
+                    </div>
+                    <div class="field">
+                        <label for="degree-program">Degree Program</label>
+                        <input type="text" id="degree-program" placeholder="Enter your degree program">
+                    </div>
+                </div>
+            </div>
+
+            <div id="semesters-container">
+                <!-- Semester 1 -->
+                <div class="semester" data-semester="1">
+                    <div class="semester-header">
+                        <h3>Semester 1</h3>
+                    </div>
+                    
+                    <div class="subject-rows">
+                        <!-- First subject row will be added by JavaScript -->
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button type="button" class="add-btn" onclick="addSubject(1)">Add Subject</button>
+                        <button type="button" class="remove-btn" onclick="removeSubject(1)">Remove Subject</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button type="button" class="add-btn" onclick="addSemester()">Add Semester</button>
+                <button type="button" class="remove-btn" onclick="removeSemester()">Remove Semester</button>
+                <button type="button" class="reset-btn" onclick="resetForm()">Reset Form</button>
+                <button type="button" class="calculate-btn" onclick="calculateGPA()">Calculate GPA</button>
+            </div>
+        </div>
+
+        <div class="result-container" id="result-container" style="display: none;">
+            <h2>GPA Results</h2>
+            <span class="gpa-value" id="gpa-value">0.00</span>
+            <div class="gpa-class" id="gpa-class">Not Calculated</div>
+
+            <div class="summary-details">
+                <div class="summary-item">
+                    <h4>Total Credits</h4>
+                    <div class="summary-value" id="total-credits">0</div>
+                </div>
+                <div class="summary-item">
+                    <h4>Credit Points</h4>
+                    <div class="summary-value" id="credit-points">0</div>
+                </div>
+                <div class="summary-item">
+                    <h4>Semesters</h4>
+                    <div class="summary-value" id="semester-count">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grade-info">
+            <div class="grade-card">
+                <h3>Grading System</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Grade</th>
+                            <th>Marks Range</th>
+                            <th>Grade Points</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>A+</td>
+                            <td>85-100</td>
+                            <td>4.00</td>
+                        </tr>
+                        <tr>
+                            <td>A</td>
+                            <td>80-84</td>
+                            <td>4.00</td>
+                        </tr>
+                        <tr>
+                            <td>A-</td>
+                            <td>75-79</td>
+                            <td>3.70</td>
+                        </tr>
+                        <tr>
+                            <td>B+</td>
+                            <td>70-74</td>
+                            <td>3.30</td>
+                        </tr>
+                        <tr>
+                            <td>B</td>
+                            <td>65-69</td>
+                            <td>3.00</td>
+                        </tr>
+                        <tr>
+                            <td>B-</td>
+                            <td>60-64</td>
+                            <td>2.70</td>
+                        </tr>
+                        <tr>
+                            <td>C+</td>
+                            <td>55-59</td>
+                            <td>2.30</td>
+                        </tr>
+                        <tr>
+                            <td>C</td>
+                            <td>50-54</td>
+                            <td>2.00</td>
+                        </tr>
+                        <tr>
+                            <td>C-</td>
+                            <td>45-49</td>
+                            <td>1.70</td>
+                        </tr>
+                        <tr>
+                            <td>D+</td>
+                            <td>40-44</td>
+                            <td>1.30</td>
+                        </tr>
+                        <tr>
+                            <td>D</td>
+                            <td>35-39</td>
+                            <td>1.00</td>
+                        </tr>
+                        <tr>
+                            <td>E</td>
+                            <td>0-34</td>
+                            <td>0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="grade-card">
+                <h3>GPA Classification</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>GPA Range</th>
+                            <th>Class</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>3.70 - 4.00</td>
+                            <td>First Class</td>
+                        </tr>
+                        <tr>
+                            <td>3.30 - 3.69</td>
+                            <td>Second Class Upper Division</td>
+                        </tr>
+                        <tr>
+                            <td>3.00 - 3.29</td>
+                            <td>Second Class Lower Division</td>
+                        </tr>
+                        <tr>
+                            <td>2.00 - 2.99</td>
+                            <td>Pass</td>
+                        </tr>
+                        <tr>
+                            <td>Below 2.00</td>
+                            <td>Fail</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2025 GPA Calculator | Developed for educational purposes | Naveen Hapuarachchi</p>
+        </footer>
+    </div>
+
+    <script>
+        // Grade point values according to Sri Lankan grading system
+        const gradePoints = {
+            'A+': 4.00,
+            'A': 4.00,
+            'A-': 3.70,
+            'B+': 3.30,
+            'B': 3.00,
+            'B-': 2.70,
+            'C+': 2.30,
+            'C': 2.00,
+            'C-': 1.70,
+            'D+': 1.30,
+            'D': 1.00,
+            'E': 0.00
+        };
+
+        // Initialize the app when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add first subject to first semester
+            addSubject(1);
+        });
+
+        // Function to add a new subject row to a specific semester
+        function addSubject(semesterId) {
+            const semesterElement = document.querySelector(`.semester[data-semester="${semesterId}"]`);
+            const subjectRowsContainer = semesterElement.querySelector('.subject-rows');
+            
+            // Create a new subject row
+            const subjectRow = document.createElement('div');
+            subjectRow.className = 'subject-row';
+            
+            // Generate a unique ID for the subject
+            const subjectId = Date.now();
+            
+            subjectRow.innerHTML = `
+                <div class="field">
+                    <label for="subject-code-${subjectId}">Subject Code</label>
+                    <input type="text" id="subject-code-${subjectId}" placeholder="e.g., CS101" required>
+                </div>
+                <div class="field">
+                    <label for="subject-name-${subjectId}">Subject Name</label>
+                    <input type="text" id="subject-name-${subjectId}" placeholder="e.g., Introduction to Programming" required>
+                </div>
+                <div class="field">
+                    <label for="credit-value-${subjectId}">Credit Value</label>
+                    <input type="number" id="credit-value-${subjectId}" placeholder="e.g., 3" min="1" max="10" step="0.5" required>
+                </div>
+                <div class="field">
+                    <label for="grade-${subjectId}">Grade</label>
+                    <select id="grade-${subjectId}" required>
+                        <option value="">Select Grade</option>
+                        <option value="A+">A+</option>
+                        <option value="A">A</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B">B</option>
+                        <option value="B-">B-</option>
+                        <option value="C+">C+</option>
+                        <option value="C">C</option>
+                        <option value="C-">C-</option>
+                        <option value="D+">D+</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                    </select>
+                </div>
+            `;
+            
+            subjectRowsContainer.appendChild(subjectRow);
+        }
+
+        // Function to remove the last subject from a specific semester
+        function removeSubject(semesterId) {
+            const semesterElement = document.querySelector(`.semester[data-semester="${semesterId}"]`);
+            const subjectRows = semesterElement.querySelectorAll('.subject-row');
+            
+            if (subjectRows.length > 1) {
+                subjectRows[subjectRows.length - 1].remove();
+            } else {
+                alert('Each semester must have at least one subject.');
+            }
+        }
+
+        // Function to add a new semester
+        function addSemester() {
+            const semestersContainer = document.getElementById('semesters-container');
+            const currentSemesters = semestersContainer.querySelectorAll('.semester');
+            const newSemesterId = currentSemesters.length + 1;
+            
+            const semesterElement = document.createElement('div');
+            semesterElement.className = 'semester';
+            semesterElement.dataset.semester = newSemesterId;
+            
+            semesterElement.innerHTML = `
+                <div class="semester-header">
+                    <h3>Semester ${newSemesterId}</h3>
+                </div>
+                
+                <div class="subject-rows">
+                    <!-- Subject rows will be added here -->
+                </div>
+                
+                <div class="action-buttons">
+                    <button type="button" class="add-btn" onclick="addSubject(${newSemesterId})">Add Subject</button>
+                    <button type="button" class="remove-btn" onclick="removeSubject(${newSemesterId})">Remove Subject</button>
+                </div>
+            `;
+            
+            semestersContainer.appendChild(semesterElement);
+            
+            // Add the first subject to the new semester
+            addSubject(newSemesterId);
+        }
+
+        // Function to remove the last semester
+        function removeSemester() {
+            const semestersContainer = document.getElementById('semesters-container');
+            const semesters = semestersContainer.querySelectorAll('.semester');
+            
+            if (semesters.length > 1) {
+                semesters[semesters.length - 1].remove();
+            } else {
+                alert('You must have at least one semester.');
+            }
+        }
+
+        // Function to reset the entire form
+        function resetForm() {
+            if (confirm('Are you sure you want to reset the form? All data will be lost.')) {
+                const semestersContainer = document.getElementById('semesters-container');
+                semestersContainer.innerHTML = '';
+                
+                // Create a new first semester
+                const semesterElement = document.createElement('div');
+                semesterElement.className = 'semester';
+                semesterElement.dataset.semester = 1;
+                
+                semesterElement.innerHTML = `
+                    <div class="semester-header">
+                        <h3>Semester 1</h3>
+                    </div>
+                    
+                    <div class="subject-rows">
+                        <!-- Subject rows will be added here -->
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button type="button" class="add-btn" onclick="addSubject(1)">Add Subject</button>
+                        <button type="button" class="remove-btn" onclick="removeSubject(1)">Remove Subject</button>
+                    </div>
+                `;
+                
+                semestersContainer.appendChild(semesterElement);
+                
+                // Add the first subject to the new semester
+                addSubject(1);
+                
+                // Clear the student information fields
+                document.getElementById('student-name').value = '';
+                document.getElementById('student-id').value = '';
+                document.getElementById('degree-program').value = '';
+                
+                // Hide results
+                document.getElementById('result-container').style.display = 'none';
+            }
+        }
+
+        // Function to calculate GPA
+        function calculateGPA() {
+            let totalCreditPoints = 0;
+            let totalCredits = 0;
+            let validForm = true;
+            
+            // Get all semesters
+            const semesters = document.querySelectorAll('.semester');
+            
+            // Validate and collect data from each semester
+            semesters.forEach(semester => {
+                const subjectRows = semester.querySelectorAll('.subject-row');
+                
+                subjectRows.forEach(row => {
+                    const creditInput = row.querySelector('input[id^="credit-value-"]');
+                    const gradeSelect = row.querySelector('select[id^="grade-"]');
+                    
+                    // Validate inputs
+                    if (!creditInput.value || !gradeSelect.value) {
+                        validForm = false;
+                        if (!creditInput.value) creditInput.style.borderColor = 'red';
+                        if (!gradeSelect.value) gradeSelect.style.borderColor = 'red';
+                    } else {
+                        creditInput.style.borderColor = '';
+                        gradeSelect.style.borderColor = '';
+                        
+                        // Calculate credit points
+                        const creditValue = parseFloat(creditInput.value);
+                        const grade = gradeSelect.value;
+                        const gradePoint = gradePoints[grade];
+                        
+                        totalCreditPoints += creditValue * gradePoint;
+                        totalCredits += creditValue;
+                    }
+                });
+            });
+            
+            if (!validForm) {
+                alert('Please fill in all required fields marked in red.');
+                return;
+            }
+            
+            // Calculate GPA
+            const gpa = totalCredits > 0 ? (totalCreditPoints / totalCredits) : 0;
+            
+            // Determine class
+            let gpaClass = '';
+            if (gpa >= 3.70) {
+                gpaClass = 'First Class';
+            } else if (gpa >= 3.30) {
+                gpaClass = 'Second Class Upper Division';
+            } else if (gpa >= 3.00) {
+                gpaClass = 'Second Class Lower Division';
+            } else if (gpa >= 2.00) {
+                gpaClass = 'Pass';
+            } else {
+                gpaClass = 'Fail';
+            }
+            
+            // Update UI with results
+            document.getElementById('gpa-value').textContent = gpa.toFixed(2);
+            document.getElementById('gpa-class').textContent = gpaClass;
+            document.getElementById('total-credits').textContent = totalCredits;
+            document.getElementById('credit-points').textContent = totalCreditPoints.toFixed(2);
+            document.getElementById('semester-count').textContent = semesters.length;
+            
+            // Show results container
+            document.getElementById('result-container').style.display = 'block';
+            
+            // Scroll to results
+            document.getElementById('result-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+</body>
+</html>
