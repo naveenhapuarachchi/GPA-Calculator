@@ -63,7 +63,8 @@ Whether you're aiming for a First Class or just tracking your progress, this cal
 
 ## 🖼️ Screenshots
 
-![Calculator Interface](https://via.placeholder.com/600x400.png?text=Calculator+Interface)  
+![Interface](https://github.com/user-attachments/assets/402906a5-5c4a-4843-b6be-c589cbc33894)
+
 *Clean, intuitive, and ready to crunch those grades!*
 
 ---
