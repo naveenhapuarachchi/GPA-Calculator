@@ -1,7 +1,8 @@
 # 🎓 GPA Calculator - Sri Lankan Edition
 
 # [GPA Calculator](https://gpa-calculator-vert-eight.vercel.app/) 👈 Click this (WebView)
-# [GPA Calculator](https://drive.google.com/file/d/1oaQth1BZctvYki_7ncriB-55F0mqmzvE/view?usp=sharing) 👈 Click this (WebApp)
+# [GPA Calculator](https://drive.google.com/file/d/1oaQth1BZctvYki_7ncriB-55F0mqmzvE/view?usp=sharing) 👈 Click this (WebApp-google drive)
+# [GPA Calculator](https://www.webintoapp.com/store/667628) 👈 Direct download (WebApp-website)
 *Calculate your academic success with style and precision!*
 
 Welcome to the **GPA Calculator**, a sleek and user-friendly tool designed specifically for Sri Lankan students to compute their Grade Point Average (GPA) with ease. 
