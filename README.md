@@ -64,6 +64,8 @@ Whether you're aiming for a First Class or just tracking your progress, this cal
 ## 🖼️ Screenshots
 
 ![Interface](https://github.com/user-attachments/assets/402906a5-5c4a-4843-b6be-c589cbc33894)
+![image](https://github.com/user-attachments/assets/eec4a7b0-0efb-4c4b-a95a-6330d90026c0)
+![image](https://github.com/user-attachments/assets/e8d39988-0b30-46b4-ace9-eb654714510c)
 
 *Clean, intuitive, and ready to crunch those grades!*
 
